@@ -11,7 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #9aa0aa;
+  color: var(--text-muted);
   font-size: 0.95rem;
 }
 
@@ -30,8 +30,9 @@
   align-items: center;
   gap: 1.5rem;
   padding: 0 1.25rem;
-  background: #1f2126;
-  border-bottom: 1px solid #2e3138;
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
 .brand {
@@ -48,13 +49,13 @@
 
 .brand-sub {
   font-size: 0.7rem;
-  color: #9aa0aa;
+  color: var(--text-muted);
 }
 
 .view-tabs {
   display: flex;
   gap: 0.25rem;
-  background: #17181c;
+  background: var(--surface-0);
   border-radius: 16px;
   padding: 3px;
 }
@@ -62,7 +63,7 @@
 .tab {
   border: none;
   background: transparent;
-  color: #9aa0aa;
+  color: var(--text-muted);
   padding: 0.4rem 0.9rem;
   border-radius: 14px;
   font-size: 0.85rem;
@@ -70,14 +71,14 @@
 }
 
 .tab.active {
-  background: #2a2d34;
-  color: #e7e9ec;
+  background: var(--surface-4);
+  color: var(--text-primary);
 }
 
 .manage-btn {
-  border: 1px solid #3a3e46;
-  background: #1b1d21;
-  color: #e7e9ec;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-3);
+  color: var(--text-primary);
   padding: 0.4rem 0.9rem;
   border-radius: 14px;
   font-size: 0.85rem;
@@ -99,9 +100,9 @@
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  border: 1px solid #3a3e46;
+  border: 1px solid var(--border-strong);
   background: transparent;
-  color: #9aa0aa;
+  color: var(--text-muted);
   padding: 0.3rem 0.7rem;
   border-radius: 999px;
   font-size: 0.78rem;
@@ -110,7 +111,7 @@
 
 .team-chip.active {
   border-color: var(--brand-red);
-  color: #e7e9ec;
+  color: var(--text-primary);
   background: var(--brand-red-soft);
 }
 
@@ -126,7 +127,7 @@
   align-items: center;
   gap: 0.6rem;
   padding-left: 1rem;
-  border-left: 1px solid #2e3138;
+  border-left: 1px solid var(--border);
 }
 
 .user-avatar-btn {
@@ -150,9 +151,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #3a3e46;
-  background: #1b1d21;
-  color: #e7e9ec;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-3);
+  color: var(--text-primary);
   border-radius: 50%;
   cursor: pointer;
 }
@@ -558,7 +559,7 @@
 }
 
 .list-column {
-  background: #212329;
+  background: var(--surface-2);
   border-radius: 16px;
   padding: 0.75rem;
   width: 284px;
@@ -588,8 +589,8 @@
 
 .list-count {
   margin-left: auto;
-  background: #17181c;
-  color: #9aa0aa;
+  background: var(--surface-0);
+  color: var(--text-muted);
   font-size: 0.72rem;
   padding: 0.1rem 0.5rem;
   border-radius: 999px;
@@ -607,7 +608,7 @@
   margin-top: 0.5rem;
   background: transparent;
   border: none;
-  color: #9aa0aa;
+  color: var(--text-muted);
   text-align: left;
   font-size: 0.82rem;
   padding: 0.4rem 0.3rem;
@@ -616,20 +617,21 @@
 }
 
 .add-card-btn:hover {
-  background: #2a2d34;
-  color: #e7e9ec;
+  background: var(--surface-4);
+  color: var(--text-primary);
 }
 
 /* ---------- Card ---------- */
 .card {
-  background: #2a2d34;
-  border: 1px solid #363a42;
+  background: var(--surface-4);
+  border: 1px solid var(--scrollbar-thumb);
   border-radius: 14px;
   padding: 0.6rem 0.65rem;
   cursor: grab;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
 .card:hover {
@@ -665,7 +667,7 @@
 
 .card-title {
   font-size: 13.5px;
-  color: #e7e9ec;
+  color: var(--text-primary);
   line-height: 1.35;
 }
 
@@ -675,14 +677,14 @@
   gap: 0.5rem;
   flex-wrap: wrap;
   font-size: 0.72rem;
-  color: #9aa0aa;
+  color: var(--text-muted);
 }
 
 .due-chip {
   padding: 0.1rem 0.4rem;
   border-radius: 14px;
-  background: #363a42;
-  color: #9aa0aa;
+  background: var(--surface-4);
+  color: var(--text-muted);
 }
 
 .due-chip.due-entregue {
@@ -702,7 +704,7 @@
 
 .check-progress,
 .comment-count {
-  color: #9aa0aa;
+  color: var(--text-muted);
 }
 
 .team-pill {
@@ -735,7 +737,7 @@
   font-weight: 700;
   color: #fff;
   margin-left: -8px;
-  border: 2px solid #2a2d34;
+  border: 2px solid var(--surface-4);
   object-fit: cover;
   flex: 0 0 auto;
 }
@@ -768,7 +770,7 @@
 
 .time-text {
   font-size: 0.72rem;
-  color: #9aa0aa;
+  color: var(--text-muted);
 }
 
 .time-text.running {
@@ -780,9 +782,9 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 1px solid #3a3e46;
-  background: #1b1d21;
-  color: #e7e9ec;
+  border: 1px solid var(--border-strong);
+  background: var(--surface-3);
+  color: var(--text-primary);
   cursor: pointer;
   font-size: 0.7rem;
   display: flex;
