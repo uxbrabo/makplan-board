@@ -866,10 +866,15 @@
   font-size: 1.3rem;
   line-height: 1;
   cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-snappy), transform var(--duration-fast) var(--ease-snappy);
 }
 
 .close-btn:hover {
   color: var(--text-primary);
+}
+
+.close-btn:active {
+  transform: scale(0.85);
 }
 
 .delete-btn {
@@ -880,6 +885,15 @@
   padding: 0.35rem 0.7rem;
   font-size: 0.8rem;
   cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-snappy), transform var(--duration-fast) var(--ease-snappy);
+}
+
+.delete-btn:hover {
+  background: rgba(201, 55, 44, 0.12);
+}
+
+.delete-btn:active {
+  transform: scale(0.96);
 }
 
 .field {
@@ -908,6 +922,17 @@
   border-radius: 14px;
   padding: 0.5rem 0.6rem;
   font-size: 0.85rem;
+  transition: border-color var(--duration-fast) var(--ease-snappy), box-shadow var(--duration-fast) var(--ease-snappy);
+}
+
+.field input[type="date"]:focus-visible,
+.field textarea:focus-visible,
+.checklist-form input:focus-visible,
+.comment-form input:focus-visible,
+.manage-form input:focus-visible {
+  outline: none;
+  border-color: var(--brand-red);
+  box-shadow: 0 0 0 3px var(--brand-red-soft);
 }
 
 .field textarea {
@@ -932,6 +957,11 @@
   border-radius: 999px;
   font-size: 0.78rem;
   cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-snappy), color var(--duration-fast) var(--ease-snappy), transform var(--duration-fast) var(--ease-snappy);
+}
+
+.member-pill:active {
+  transform: scale(0.96);
 }
 
 .member-pill.active {
@@ -978,22 +1008,31 @@
   border-radius: 14px;
   padding: 0.35rem 0.5rem;
   font-size: 0.8rem;
+  transition: border-color var(--duration-fast) var(--ease-snappy), box-shadow var(--duration-fast) var(--ease-snappy);
+}
+
+.column-select:focus-visible {
+  outline: none;
+  border-color: var(--brand-red);
+  box-shadow: 0 0 0 3px var(--brand-red-soft);
 }
 
 .title-input {
   width: 100%;
   background: transparent;
   border: none;
+  border-bottom: 1px solid transparent;
   color: var(--text-strong);
   font-size: 1.2rem;
   font-weight: 600;
   margin-bottom: 1rem;
   padding: 0.2rem 0;
+  transition: border-color var(--duration-fast) var(--ease-snappy);
 }
 
 .title-input:focus {
   outline: none;
-  border-bottom: 1px solid var(--brand-red);
+  border-color: var(--brand-red);
 }
 
 .timer-block {
@@ -1027,10 +1066,15 @@
   cursor: pointer;
   background: #1F845A;
   color: #fff;
+  transition: background-color var(--duration-fast) var(--ease-snappy), transform var(--duration-fast) var(--ease-snappy);
 }
 
 .timer-toggle.running {
   background: #C9372C;
+}
+
+.timer-toggle:active {
+  transform: scale(0.96);
 }
 
 .checklist-progress {
@@ -1078,6 +1122,14 @@
   flex: 1;
 }
 
+.checklist li label input[type="checkbox"] {
+  accent-color: var(--brand-red);
+}
+
+.checklist li label span {
+  transition: color var(--duration-fast) var(--ease-snappy);
+}
+
 .checklist li.done span {
   text-decoration: line-through;
   color: var(--text-faint);
@@ -1089,6 +1141,15 @@
   color: var(--text-faint);
   cursor: pointer;
   font-size: 1rem;
+  transition: color var(--duration-fast) var(--ease-snappy), transform var(--duration-fast) var(--ease-snappy);
+}
+
+.checklist li button:hover {
+  color: var(--brand-red-light);
+}
+
+.checklist li button:active {
+  transform: scale(0.85);
 }
 
 .checklist-form {
@@ -1110,6 +1171,19 @@
   padding: 0.5rem 0.9rem;
   font-size: 0.82rem;
   cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-snappy), transform var(--duration-fast) var(--ease-snappy);
+}
+
+.checklist-form button:hover,
+.comment-form button:hover,
+.manage-form button:hover {
+  border-color: var(--brand-red);
+}
+
+.checklist-form button:active,
+.comment-form button:active,
+.manage-form button:active {
+  transform: scale(0.96);
 }
 
 .attachments-grid {
@@ -1176,6 +1250,7 @@
   color: var(--text-faint);
   font-size: 0.75rem;
   cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-snappy), color var(--duration-fast) var(--ease-snappy);
 }
 
 .attachment-add:hover {
@@ -1244,6 +1319,7 @@
   font-size: 0.85rem;
   text-align: left;
   cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-snappy);
 }
 
 .mention-option.active,
