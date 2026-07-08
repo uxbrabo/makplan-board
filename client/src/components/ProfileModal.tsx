@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { motion } from "motion/react";
+import { springSmooth } from "../motion";
 import { WORKSPACE_BG_PALETTE, WORKSPACE_BG_PALETTE_LIGHT } from "../constants";
 import { Avatar } from "./Avatar";
 import type { Member, Theme } from "../types";
@@ -50,7 +51,7 @@ export function ProfileModal({ me, email, bgColor, theme, onClose, onUploadAvata
         initial={{ opacity: 0, scale: 0.96, y: 8 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 8 }}
-        transition={{ type: "spring", stiffness: 420, damping: 34 }}
+        transition={springSmooth}
       >
         <div className="modal-topbar">
           <span className="side-title">Meu perfil</span>

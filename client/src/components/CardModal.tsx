@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { motion } from "motion/react";
+import { springSmooth } from "../motion";
 import { COLUMNS, TEAMS } from "../constants";
 import { formatCommentTime } from "../utils/date";
 import { formatCardTime } from "../utils/time";
@@ -160,7 +161,7 @@ export function CardModal({
         initial={{ opacity: 0, scale: 0.96, y: 8 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.96, y: 8 }}
-        transition={{ type: "spring", stiffness: 420, damping: 34 }}
+        transition={springSmooth}
       >
         <div className="modal-topbar">
           <button
