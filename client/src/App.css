@@ -183,8 +183,8 @@
   min-height: 560px;
   display: grid;
   grid-template-columns: 1.05fr 1fr;
-  background: #1a1c21;
-  border: 1px solid #2a2d34;
+  background: var(--surface-panel);
+  border: 1px solid var(--surface-4);
   border-radius: 22px;
   overflow: hidden;
   box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.6);
@@ -281,7 +281,7 @@
   align-items: center;
   justify-content: center;
   padding: 2.5rem;
-  background: #1a1c21;
+  background: var(--surface-panel);
 }
 
 .auth-card {
@@ -295,7 +295,7 @@
 .auth-tabs {
   display: flex;
   gap: 0.25rem;
-  background: #101115;
+  background: var(--surface-0);
   border-radius: 14px;
   padding: 3px;
 }
@@ -304,7 +304,7 @@
   flex: 1;
   border: none;
   background: transparent;
-  color: #9aa0aa;
+  color: var(--text-muted);
   padding: 0.5rem 0.6rem;
   border-radius: 14px;
   font-size: 0.85rem;
@@ -314,8 +314,8 @@
 }
 
 .auth-tab.active {
-  background: #2a2d34;
-  color: #f1f2f4;
+  background: var(--surface-4);
+  color: var(--text-strong);
 }
 
 .auth-form-header {
@@ -328,13 +328,13 @@
   margin: 0;
   font-size: 1.25rem;
   font-weight: 700;
-  color: #f1f2f4;
+  color: var(--text-strong);
 }
 
 .auth-form-header p {
   margin: 0;
   font-size: 0.82rem;
-  color: #9aa0aa;
+  color: var(--text-muted);
   line-height: 1.4;
 }
 
@@ -347,7 +347,7 @@
 .auth-field-label {
   font-size: 0.72rem;
   font-weight: 600;
-  color: #9aa0aa;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -363,16 +363,16 @@
   left: 0.7rem;
   width: 16px;
   height: 16px;
-  color: #6b707a;
+  color: var(--text-faint);
   pointer-events: none;
 }
 
 .auth-card input,
 .auth-card select {
   width: 100%;
-  background: #101115;
-  border: 1px solid #33363e;
-  color: #e7e9ec;
+  background: var(--surface-0);
+  border: 1px solid var(--border-strong);
+  color: var(--text-primary);
   border-radius: 16px;
   padding: 0.65rem 0.75rem 0.65rem 2.15rem;
   font-size: 0.88rem;
@@ -458,7 +458,7 @@
 .auth-switch {
   text-align: center;
   font-size: 0.8rem;
-  color: #9aa0aa;
+  color: var(--text-muted);
   margin: 0;
 }
 
@@ -473,7 +473,7 @@
 }
 
 .auth-hint {
-  color: #6b707a;
+  color: var(--text-faint);
   font-size: 0.72rem;
   text-align: center;
   margin: 0;
@@ -483,8 +483,8 @@
 .confirmed-card {
   width: 100%;
   max-width: 360px;
-  background: #1a1c21;
-  border: 1px solid #2a2d34;
+  background: var(--surface-panel);
+  border: 1px solid var(--surface-4);
   border-radius: 22px;
   padding: 2.5rem 2rem;
   text-align: center;
@@ -514,13 +514,13 @@
 .confirmed-card h2 {
   margin: 0;
   font-size: 1.3rem;
-  color: #f1f2f4;
+  color: var(--text-strong);
 }
 
 .confirmed-card p {
   margin: 0;
   font-size: 0.85rem;
-  color: #9aa0aa;
+  color: var(--text-muted);
   line-height: 1.5;
 }
 
