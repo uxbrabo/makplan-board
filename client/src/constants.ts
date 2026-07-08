@@ -28,10 +28,19 @@ export const LABEL_PALETTE = [
 
 export const AGENCY_EMAIL_DOMAIN = "makplan.com.br";
 
+export const WORKSPACE_BG_PALETTE: { name: string; value: string | null }[] = [
+  { name: "Padrão", value: null },
+  { name: "Vermelho Makplan", value: "#1f1315" },
+  { name: "Grafite", value: "#1c1c1e" },
+  { name: "Azul-noite", value: "#12161f" },
+  { name: "Verde-musgo", value: "#131b16" },
+  { name: "Roxo-escuro", value: "#191420" },
+];
+
 export const TWEAKS_STORAGE_KEY = "makplan-tweaks";
 
 export const defaultTweaks: Tweaks = {
-  corDestaque: "#6ea8e8",
+  corDestaque: "#d73347",
   timerUnico: false,
   mostrarSegundos: false,
 };

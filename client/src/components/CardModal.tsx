@@ -1,8 +1,13 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { motion } from "motion/react";
 import { COLUMNS, TEAMS } from "../constants";
 import { formatCommentTime } from "../utils/date";
 import { formatCardTime } from "../utils/time";
-import type { BoardState, Card, ColumnId } from "../types";
+import { renderMentionText } from "../utils/mentions";
+import { Avatar } from "./Avatar";
+import type { BoardState, Card, ColumnId, Member } from "../types";
+
+const MENTION_TRIGGER = /(?:^|\s)@([^\s@]*)$/;
 
 interface CardModalProps {
   card: Card;
@@ -18,6 +23,9 @@ interface CardModalProps {
   onToggleChecklist: (itemId: string) => void;
   onRemoveChecklist: (itemId: string) => void;
   onAddComment: (text: string) => void;
+  onUploadAttachment: (file: File) => Promise<void>;
+  onRemoveAttachment: (attachmentId: string) => void;
+  onSetCover: (attachmentId: string | null) => void;
 }
 
 export function CardModal({
@@ -34,13 +42,26 @@ export function CardModal({
   onToggleChecklist,
   onRemoveChecklist,
   onAddComment,
+  onUploadAttachment,
+  onRemoveAttachment,
+  onSetCover,
 }: CardModalProps) {
   const [checkText, setCheckText] = useState("");
   const [commentText, setCommentText] = useState("");
+  const [mentionQuery, setMentionQuery] = useState<string | null>(null);
+  const [mentionIndex, setMentionIndex] = useState(0);
+  const [uploadingAttachment, setUploadingAttachment] = useState(false);
+  const [attachmentError, setAttachmentError] = useState<string | null>(null);
+  const commentInputRef = useRef<HTMLInputElement>(null);
+  const attachmentInputRef = useRef<HTMLInputElement>(null);
 
   const team = TEAMS.find((t) => t.id === card.team)!;
   const checkedCount = card.check.filter((i) => i.done).length;
   const progress = card.check.length ? (checkedCount / card.check.length) * 100 : 0;
+  const mentionMatches =
+    mentionQuery !== null
+      ? state.members.filter((m) => m.name.toLowerCase().includes(mentionQuery.toLowerCase())).slice(0, 6)
+      : [];
 
   function cycleTeam() {
     const idx = TEAMS.findIndex((t) => t.id === card.team);
@@ -58,11 +79,89 @@ export function CardModal({
     e.preventDefault();
     onAddComment(commentText);
     setCommentText("");
+    setMentionQuery(null);
+  }
+
+  function handleCommentChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    setCommentText(value);
+    const cursor = e.target.selectionStart ?? value.length;
+    const match = MENTION_TRIGGER.exec(value.slice(0, cursor));
+    if (match) {
+      setMentionQuery(match[1]);
+      setMentionIndex(0);
+    } else {
+      setMentionQuery(null);
+    }
+  }
+
+  function selectMention(member: Member) {
+    const input = commentInputRef.current;
+    const cursor = input?.selectionStart ?? commentText.length;
+    const uptoCursor = commentText.slice(0, cursor);
+    const match = MENTION_TRIGGER.exec(uptoCursor);
+    if (!match) return;
+    const atIndex = uptoCursor.lastIndexOf("@");
+    const before = commentText.slice(0, atIndex);
+    const after = commentText.slice(cursor);
+    const insertion = `@[${member.name}](${member.id}) `;
+    setCommentText(`${before}${insertion}${after}`);
+    setMentionQuery(null);
+    requestAnimationFrame(() => {
+      const pos = before.length + insertion.length;
+      input?.focus();
+      input?.setSelectionRange(pos, pos);
+    });
+  }
+
+  function handleCommentKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (mentionQuery === null || mentionMatches.length === 0) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setMentionIndex((i) => (i + 1) % mentionMatches.length);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setMentionIndex((i) => (i - 1 + mentionMatches.length) % mentionMatches.length);
+    } else if (e.key === "Enter" || e.key === "Tab") {
+      e.preventDefault();
+      selectMention(mentionMatches[mentionIndex]);
+    } else if (e.key === "Escape") {
+      setMentionQuery(null);
+    }
+  }
+
+  async function handleAttachmentChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setAttachmentError(null);
+    setUploadingAttachment(true);
+    try {
+      await onUploadAttachment(file);
+    } catch (err) {
+      setAttachmentError(err instanceof Error ? err.message : "Não foi possível enviar o anexo.");
+    } finally {
+      setUploadingAttachment(false);
+      e.target.value = "";
+    }
   }
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="card-modal" onClick={(e) => e.stopPropagation()}>
+    <motion.div
+      className="modal-overlay"
+      onClick={onClose}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.15 }}
+    >
+      <motion.div
+        className="card-modal"
+        onClick={(e) => e.stopPropagation()}
+        initial={{ opacity: 0, scale: 0.96, y: 8 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 8 }}
+        transition={{ type: "spring", stiffness: 420, damping: 34 }}
+      >
         <div className="modal-topbar">
           <button
             type="button"
@@ -75,6 +174,7 @@ export function CardModal({
 
           <select
             className="column-select"
+            aria-label="Mover cartão para coluna"
             value={card.col}
             onChange={(e) => onUpdate({ col: e.target.value as ColumnId })}
           >
@@ -98,6 +198,7 @@ export function CardModal({
           <div className="modal-main">
             <input
               className="title-input"
+              aria-label="Título do cartão"
               value={card.title}
               onChange={(e) => onUpdate({ title: e.target.value })}
             />
@@ -118,6 +219,7 @@ export function CardModal({
               <label>Prazo</label>
               <input
                 type="date"
+                aria-label="Prazo"
                 value={card.due ?? ""}
                 onChange={(e) => onUpdate({ due: e.target.value || null })}
               />
@@ -157,9 +259,7 @@ export function CardModal({
                       style={active ? { borderColor: memberTeam?.color } : undefined}
                       onClick={() => onToggleMember(member.id)}
                     >
-                      <span className="avatar small" style={{ background: memberTeam?.color }}>
-                        {member.ini}
-                      </span>
+                      <Avatar member={member} size="small" />
                       {member.name}
                     </button>
                   );
@@ -216,35 +316,97 @@ export function CardModal({
 
             <div className="field">
               <label>Anexos</label>
-              <div className="attachments-drop">arraste arquivos aqui</div>
+              <div className="attachments-grid">
+                {card.attachments.map((att) => (
+                  <div
+                    key={att.id}
+                    className={att.id === card.coverAttachmentId ? "attachment-thumb is-cover" : "attachment-thumb"}
+                  >
+                    <img src={att.url} alt={att.name} />
+                    <div className="attachment-actions">
+                      <button
+                        type="button"
+                        onClick={() => onSetCover(att.id === card.coverAttachmentId ? null : att.id)}
+                      >
+                        {att.id === card.coverAttachmentId ? "Remover capa" : "Definir capa"}
+                      </button>
+                      <button type="button" onClick={() => onRemoveAttachment(att.id)} aria-label="Remover anexo">
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  className="attachment-add"
+                  onClick={() => attachmentInputRef.current?.click()}
+                  disabled={uploadingAttachment}
+                >
+                  {uploadingAttachment ? "Enviando..." : "+ Adicionar imagem"}
+                </button>
+              </div>
+              <input
+                ref={attachmentInputRef}
+                type="file"
+                accept="image/*"
+                aria-label="Escolher anexo"
+                onChange={handleAttachmentChange}
+                style={{ display: "none" }}
+              />
+              {attachmentError && <p className="auth-error">{attachmentError}</p>}
             </div>
           </div>
 
           <div className="modal-side">
             <div className="side-title">Comentários e atividade</div>
-            <form className="comment-form" onSubmit={submitComment}>
-              <input
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                placeholder="Escreva um comentário..."
-              />
-              <button type="submit">Enviar</button>
-            </form>
+            <div className="comment-form-wrap">
+              <form className="comment-form" onSubmit={submitComment}>
+                <input
+                  ref={commentInputRef}
+                  value={commentText}
+                  onChange={handleCommentChange}
+                  onKeyDown={handleCommentKeyDown}
+                  placeholder="Escreva um comentário... use @ para mencionar"
+                />
+                <button type="submit">Enviar</button>
+              </form>
+              {mentionQuery !== null && mentionMatches.length > 0 && (
+                <div className="mention-dropdown">
+                  {mentionMatches.map((member, i) => (
+                    <button
+                      key={member.id}
+                      type="button"
+                      className={i === mentionIndex ? "mention-option active" : "mention-option"}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        selectMention(member);
+                      }}
+                    >
+                      <Avatar member={member} size="small" />
+                      {member.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             <div className="comments">
               {card.comments.map((comment) => {
                 const author = state.members.find((m) => m.id === comment.authorId);
-                const authorTeam = author ? TEAMS.find((t) => t.id === author.team) : undefined;
                 return (
                   <div key={comment.id} className="comment">
-                    <span className="avatar small" style={{ background: authorTeam?.color ?? "#6b707a" }}>
-                      {author?.ini ?? "?"}
-                    </span>
+                    {author ? (
+                      <Avatar member={author} size="small" />
+                    ) : (
+                      <span className="avatar small" style={{ background: "#6b707a" }}>
+                        ?
+                      </span>
+                    )}
                     <div>
                       <div className="comment-meta">
                         <strong>{comment.authorName}</strong>
                         <span>{formatCommentTime(comment.createdAt)}</span>
                       </div>
-                      <div className="comment-text">{comment.text}</div>
+                      <div className="comment-text">{renderMentionText(comment.text)}</div>
                     </div>
                   </div>
                 );
@@ -252,7 +414,7 @@ export function CardModal({
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

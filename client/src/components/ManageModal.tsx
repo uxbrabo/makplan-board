@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { motion } from "motion/react";
 import { AGENCY_EMAIL_DOMAIN, LABEL_PALETTE, TEAMS } from "../constants";
+import { Avatar } from "./Avatar";
 import type { BoardState } from "../types";
 
 interface ManageModalProps {
@@ -22,8 +24,22 @@ export function ManageModal({ state, onClose, onRemoveMember, onAddLabel, onRemo
   }
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="manage-modal" onClick={(e) => e.stopPropagation()}>
+    <motion.div
+      className="modal-overlay"
+      onClick={onClose}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.15 }}
+    >
+      <motion.div
+        className="manage-modal"
+        onClick={(e) => e.stopPropagation()}
+        initial={{ opacity: 0, scale: 0.96, y: 8 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.96, y: 8 }}
+        transition={{ type: "spring", stiffness: 420, damping: 34 }}
+      >
         <div className="modal-topbar">
           <span className="side-title">Gerenciar</span>
           <div className="modal-topbar-spacer" />
@@ -42,9 +58,7 @@ export function ManageModal({ state, onClose, onRemoveMember, onAddLabel, onRemo
                 const team = TEAMS.find((t) => t.id === member.team);
                 return (
                   <li key={member.id}>
-                    <span className="avatar small" style={{ background: team?.color }}>
-                      {member.ini}
-                    </span>
+                    <Avatar member={member} size="small" />
                     <span className="manage-item-name">{member.name}</span>
                     <span className="manage-item-team" style={{ color: team?.color }}>
                       {team?.name}
@@ -111,7 +125,7 @@ export function ManageModal({ state, onClose, onRemoveMember, onAddLabel, onRemo
             )}
           </section>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

@@ -1,5 +1,6 @@
 import { TEAMS } from "../constants";
-import type { BoardState } from "../types";
+import { Avatar } from "./Avatar";
+import type { BoardState, Member } from "../types";
 
 interface HeaderProps {
   view: "board" | "overview";
@@ -7,15 +8,25 @@ interface HeaderProps {
   filter: BoardState["filter"];
   onChangeFilter: (filter: BoardState["filter"]) => void;
   onManage: () => void;
-  userEmail: string;
+  me: Member | undefined;
+  onOpenProfile: () => void;
   onSignOut: () => void;
 }
 
-export function Header({ view, onChangeView, filter, onChangeFilter, onManage, userEmail, onSignOut }: HeaderProps) {
+export function Header({
+  view,
+  onChangeView,
+  filter,
+  onChangeFilter,
+  onManage,
+  me,
+  onOpenProfile,
+  onSignOut,
+}: HeaderProps) {
   return (
     <header className="app-header">
       <div className="brand">
-        <span className="brand-name">Makplan</span>
+        <img src="/makplan-logo-white.svg" alt="Makplan" className="brand-logo" />
         <span className="brand-sub">Gestão de equipe</span>
       </div>
 
@@ -62,7 +73,11 @@ export function Header({ view, onChangeView, filter, onChangeFilter, onManage, u
       </div>
 
       <div className="user-chip">
-        <span className="user-email">{userEmail}</span>
+        {me && (
+          <button type="button" className="user-avatar-btn" onClick={onOpenProfile} aria-label="Meu perfil">
+            <Avatar member={me} />
+          </button>
+        )}
         <button type="button" className="manage-btn" onClick={onSignOut}>
           Sair
         </button>

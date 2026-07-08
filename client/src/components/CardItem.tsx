@@ -1,6 +1,7 @@
 import { TEAMS } from "../constants";
 import { dueStatus, formatDue } from "../utils/date";
 import { formatCardTime } from "../utils/time";
+import { Avatar } from "./Avatar";
 import type { Card, LabelMap, Member, Tweaks } from "../types";
 
 interface CardItemProps {
@@ -21,6 +22,7 @@ export function CardItem({ card, members, labels, now, tweaks, onOpen, onToggleT
     .filter((m): m is Member => Boolean(m));
   const checkedCount = card.check.filter((i) => i.done).length;
   const status = dueStatus(card.due, card.col);
+  const cover = card.attachments.find((a) => a.id === card.coverAttachmentId);
 
   return (
     <div
@@ -29,6 +31,8 @@ export function CardItem({ card, members, labels, now, tweaks, onOpen, onToggleT
       onDragStart={onDragStart}
       onClick={onOpen}
     >
+      {cover && <img src={cover.url} alt="" className="card-cover" />}
+
       {card.labels.length > 0 && (
         <div className="card-labels">
           {card.labels.map((name) => (
@@ -58,19 +62,9 @@ export function CardItem({ card, members, labels, now, tweaks, onOpen, onToggleT
 
       <div className="card-footer">
         <div className="card-avatars">
-          {cardMembers.map((member) => {
-            const memberTeam = TEAMS.find((t) => t.id === member.team);
-            return (
-              <span
-                key={member.id}
-                className="avatar"
-                style={{ background: memberTeam?.color }}
-                title={member.name}
-              >
-                {member.ini}
-              </span>
-            );
-          })}
+          {cardMembers.map((member) => (
+            <Avatar key={member.id} member={member} />
+          ))}
         </div>
         <div className="card-timer">
           {(card.ms > 0 || card.run) && (

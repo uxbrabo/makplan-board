@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { COLUMNS } from "../constants";
 import { CardItem } from "./CardItem";
 import type { BoardState, Card, ColumnId } from "../types";
@@ -51,31 +52,41 @@ export function Board({ state, now, onOpenCard, onToggleTimer, onAddCard, onMove
             </div>
 
             <div className="cards">
-              {cards.map((card) => (
-                <div
-                  key={card.id}
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setDragOverCol(column.id);
-                  }}
-                  onDrop={(e) => {
-                    e.stopPropagation();
-                    handleDrop(column.id, card.id);
-                  }}
-                >
-                  <CardItem
-                    card={card}
-                    members={state.members}
-                    labels={state.labels}
-                    now={now}
-                    tweaks={state.tweaks}
-                    onOpen={() => onOpenCard(card.id)}
-                    onToggleTimer={() => onToggleTimer(card.id)}
-                    onDragStart={() => setDraggingId(card.id)}
-                  />
-                </div>
-              ))}
+              <AnimatePresence initial={false}>
+                {cards.map((card) => (
+                  <motion.div
+                    key={card.id}
+                    layoutId={card.id}
+                    layout
+                    initial={{ opacity: 0, scale: 0.92 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.92 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 38, mass: 0.6 }}
+                    whileHover={{ scale: 1.015 }}
+                    whileTap={{ scale: 0.98 }}
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setDragOverCol(column.id);
+                    }}
+                    onDrop={(e) => {
+                      e.stopPropagation();
+                      handleDrop(column.id, card.id);
+                    }}
+                  >
+                    <CardItem
+                      card={card}
+                      members={state.members}
+                      labels={state.labels}
+                      now={now}
+                      tweaks={state.tweaks}
+                      onOpen={() => onOpenCard(card.id)}
+                      onToggleTimer={() => onToggleTimer(card.id)}
+                      onDragStart={() => setDraggingId(card.id)}
+                    />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
 
             <button type="button" className="add-card-btn" onClick={() => onAddCard(column.id)}>

@@ -3,11 +3,12 @@ import { supabase } from "./supabaseClient";
 import type { Card, ColumnId, LabelMap, Member, TeamId } from "./types";
 
 const CARD_SELECT = `
-  id, title, description, col, team_id, due, ms, run, start_at, position,
+  id, title, description, col, team_id, due, ms, run, start_at, position, cover_attachment_id,
   card_members(member_id),
   card_labels(label_name),
   checklist_items(id, text, done, position),
-  comments(id, text, created_at, author_id, profiles(name, ini))
+  comments(id, text, created_at, author_id, profiles(name, ini)),
+  card_attachments!card_attachments_card_id_fkey(id, url, name)
 `;
 
 interface ProfileRow {
@@ -15,6 +16,8 @@ interface ProfileRow {
   name: string;
   ini: string;
   team_id: TeamId;
+  avatar_url: string | null;
+  bg_color: string | null;
 }
 
 interface LabelRow {
@@ -33,12 +36,14 @@ interface CardRow {
   run: boolean;
   start_at: string | null;
   position: number;
+  cover_attachment_id: string | null;
   card_members: { member_id: string }[] | null;
   card_labels: { label_name: string }[] | null;
   checklist_items: { id: string; text: string; done: boolean; position: number }[] | null;
   comments:
     | { id: string; text: string; created_at: string; author_id: string | null; profiles: { name: string; ini: string } | null }[]
     | null;
+  card_attachments: { id: string; url: string; name: string }[] | null;
 }
 
 function mapCard(row: CardRow): Card {
@@ -65,6 +70,8 @@ function mapCard(row: CardRow): Card {
         text: c.text,
         createdAt: c.created_at,
       })),
+    attachments: (row.card_attachments ?? []).map((a) => ({ id: a.id, url: a.url, name: a.name })),
+    coverAttachmentId: row.cover_attachment_id,
     ms: Number(row.ms),
     run: row.run,
     start: row.start_at ? new Date(row.start_at).getTime() : null,
@@ -76,6 +83,7 @@ export function useSupabaseBoard(userId: string) {
   const [members, setMembers] = useState<Member[]>([]);
   const [labels, setLabels] = useState<LabelMap>({});
   const [cards, setCards] = useState<Card[]>([]);
+  const [myBgColor, setMyBgColor] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const cardsRef = useRef<Card[]>([]);
@@ -85,7 +93,7 @@ export function useSupabaseBoard(userId: string) {
 
   const fetchAll = useCallback(async () => {
     const [profilesRes, labelsRes, cardsRes] = await Promise.all([
-      supabase.from("profiles").select("id, name, ini, team_id").order("name"),
+      supabase.from("profiles").select("id, name, ini, team_id, avatar_url, bg_color").order("name"),
       supabase.from("labels").select("name, color").order("name"),
       supabase.from("cards").select(CARD_SELECT).order("position"),
     ]);
@@ -94,13 +102,15 @@ export function useSupabaseBoard(userId: string) {
     if (labelsRes.error) throw labelsRes.error;
     if (cardsRes.error) throw cardsRes.error;
 
+    const profileRows = profilesRes.data as ProfileRow[];
     setMembers(
-      (profilesRes.data as ProfileRow[]).map((p) => ({ id: p.id, ini: p.ini, name: p.name, team: p.team_id })),
+      profileRows.map((p) => ({ id: p.id, ini: p.ini, name: p.name, team: p.team_id, avatarUrl: p.avatar_url })),
     );
+    setMyBgColor(profileRows.find((p) => p.id === userId)?.bg_color ?? null);
     setLabels(Object.fromEntries((labelsRes.data as LabelRow[]).map((l) => [l.name, l.color])));
     setCards((cardsRes.data as unknown as CardRow[]).map(mapCard));
     setLoading(false);
-  }, []);
+  }, [userId]);
 
   useEffect(() => {
     fetchAll();
@@ -120,6 +130,7 @@ export function useSupabaseBoard(userId: string) {
       .on("postgres_changes", { event: "*", schema: "public", table: "comments" }, scheduleRefetch)
       .on("postgres_changes", { event: "*", schema: "public", table: "labels" }, scheduleRefetch)
       .on("postgres_changes", { event: "*", schema: "public", table: "profiles" }, scheduleRefetch)
+      .on("postgres_changes", { event: "*", schema: "public", table: "card_attachments" }, scheduleRefetch)
       .subscribe();
 
     return () => {
@@ -286,10 +297,61 @@ export function useSupabaseBoard(userId: string) {
     await fetchAll();
   }
 
+  async function uploadAvatar(file: File) {
+    const ext = file.name.split(".").pop() ?? "jpg";
+    const path = `${userId}/avatar.${ext}`;
+    const { error: uploadError } = await supabase.storage
+      .from("avatars")
+      .upload(path, file, { upsert: true, cacheControl: "3600" });
+    if (uploadError) throw uploadError;
+
+    const { data } = supabase.storage.from("avatars").getPublicUrl(path);
+    const avatarUrl = `${data.publicUrl}?t=${Date.now()}`;
+    const { error } = await supabase.from("profiles").update({ avatar_url: avatarUrl }).eq("id", userId);
+    if (error) throw error;
+    await fetchAll();
+  }
+
+  async function setBgColor(color: string | null) {
+    const { error } = await supabase.from("profiles").update({ bg_color: color }).eq("id", userId);
+    if (error) throw error;
+    await fetchAll();
+  }
+
+  async function uploadAttachment(cardId: string, file: File) {
+    const path = `${cardId}/${crypto.randomUUID()}-${file.name}`;
+    const { error: uploadError } = await supabase.storage.from("attachments").upload(path, file);
+    if (uploadError) throw uploadError;
+
+    const { data } = supabase.storage.from("attachments").getPublicUrl(path);
+    const { error } = await supabase
+      .from("card_attachments")
+      .insert({ card_id: cardId, path, url: data.publicUrl, name: file.name });
+    if (error) throw error;
+    await fetchAll();
+  }
+
+  async function removeAttachment(attachmentId: string) {
+    const card = cardsRef.current.find((c) => c.attachments.some((a) => a.id === attachmentId));
+    if (card?.coverAttachmentId === attachmentId) {
+      await supabase.from("cards").update({ cover_attachment_id: null }).eq("id", card.id);
+    }
+    const { error } = await supabase.from("card_attachments").delete().eq("id", attachmentId);
+    if (error) throw error;
+    await fetchAll();
+  }
+
+  async function setCover(cardId: string, attachmentId: string | null) {
+    const { error } = await supabase.from("cards").update({ cover_attachment_id: attachmentId }).eq("id", cardId);
+    if (error) throw error;
+    await fetchAll();
+  }
+
   return {
     members,
     labels,
     cards,
+    myBgColor,
     loading,
     addCard,
     updateCard,
@@ -305,5 +367,10 @@ export function useSupabaseBoard(userId: string) {
     removeMember,
     addLabel,
     removeLabel,
+    uploadAvatar,
+    setBgColor,
+    uploadAttachment,
+    removeAttachment,
+    setCover,
   };
 }

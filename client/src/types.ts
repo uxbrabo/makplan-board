@@ -11,6 +11,7 @@ export interface Member {
   ini: string;
   name: string;
   team: TeamId;
+  avatarUrl: string | null;
 }
 
 export type LabelMap = Record<string, string>;
@@ -31,6 +32,12 @@ export interface Comment {
   createdAt: string;
 }
 
+export interface Attachment {
+  id: string;
+  url: string;
+  name: string;
+}
+
 export interface Card {
   id: string;
   title: string;
@@ -42,6 +49,8 @@ export interface Card {
   due: string | null;
   check: ChecklistItem[];
   comments: Comment[];
+  attachments: Attachment[];
+  coverAttachmentId: string | null;
   ms: number;
   run: boolean;
   start: number | null;
