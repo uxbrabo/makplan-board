@@ -37,6 +37,15 @@ export const WORKSPACE_BG_PALETTE: { name: string; value: string | null }[] = [
   { name: "Roxo-escuro", value: "#191420" },
 ];
 
+export const WORKSPACE_BG_PALETTE_LIGHT: { name: string; value: string | null }[] = [
+  { name: "Padrão", value: null },
+  { name: "Vermelho Makplan", value: "#fbe9ea" },
+  { name: "Grafite", value: "#eef0f2" },
+  { name: "Azul-noite", value: "#e8eef7" },
+  { name: "Verde-musgo", value: "#e9f3ec" },
+  { name: "Roxo-escuro", value: "#f1ecf7" },
+];
+
 export const TWEAKS_STORAGE_KEY = "makplan-tweaks";
 
 export const defaultTweaks: Tweaks = {

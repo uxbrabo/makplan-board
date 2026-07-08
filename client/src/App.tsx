@@ -13,6 +13,7 @@ import { useAuth } from "./auth/useAuth";
 import { useSupabaseBoard } from "./useSupabaseBoard";
 import { useTweaks } from "./useTweaks";
 import { useTheme } from "./useTheme";
+import { resolveWorkspaceBg } from "./utils/theme";
 import { TEAMS } from "./constants";
 import type { BoardState, ColumnId } from "./types";
 import "./App.css";
@@ -91,7 +92,7 @@ function BoardApp({ userId, userEmail, onSignOut }: { userId: string; userEmail:
         onToggleTheme={toggleTheme}
       />
 
-      <main className="workspace" style={{ background: boardData.myBgColor ?? undefined }}>
+      <main className="workspace" style={{ background: resolveWorkspaceBg(boardData.myBgColor, theme) ?? undefined }}>
         {view === "board" ? (
           <Board
             state={state}
@@ -150,6 +151,7 @@ function BoardApp({ userId, userEmail, onSignOut }: { userId: string; userEmail:
             me={me}
             email={userEmail}
             bgColor={boardData.myBgColor}
+            theme={theme}
             onClose={() => setProfileOpen(false)}
             onUploadAvatar={boardData.uploadAvatar}
             onSetBgColor={(color) => boardData.setBgColor(color).catch(console.error)}
