@@ -1677,10 +1677,25 @@
   padding: 0.5rem 0.7rem;
   font-size: 0.85rem;
   cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-snappy), transform var(--duration-fast) var(--ease-snappy);
+}
+
+.running-list li:hover,
+.deadline-list li:hover {
+  background: var(--surface-4);
+}
+
+.running-list li:active,
+.deadline-list li:active {
+  transform: scale(0.98);
 }
 
 .deadline-list li.overdue {
   background: rgba(201, 55, 44, 0.12);
+}
+
+.deadline-list li.overdue:hover {
+  background: rgba(201, 55, 44, 0.2);
 }
 
 .pulse-dot {
