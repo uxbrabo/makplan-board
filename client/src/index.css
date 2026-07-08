@@ -34,14 +34,14 @@
   --surface-1: #ffffff;
   --surface-2: #f7f8fa;
   --surface-3: #f1f2f5;
-  --surface-4: #e7e9ee;
+  --surface-4: #dcdee3;
   --surface-panel: #ffffff;
   --border: #e2e4e8;
   --border-strong: #d5d8dd;
   --text-primary: #1c1e22;
   --text-strong: #101115;
   --text-muted: #6b7280;
-  --text-faint: #8b8f98;
+  --text-faint: #70757e;
   --overlay: rgba(15, 17, 21, 0.35);
   --scrollbar-thumb: #c9ccd2;
 }
