@@ -68,6 +68,11 @@
   border-radius: 14px;
   font-size: 0.85rem;
   cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-snappy), color var(--duration-fast) var(--ease-snappy), transform var(--duration-fast) var(--ease-snappy);
+}
+
+.tab:active {
+  transform: scale(0.96);
 }
 
 .tab.active {
@@ -83,10 +88,15 @@
   border-radius: 14px;
   font-size: 0.85rem;
   cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-snappy), transform var(--duration-fast) var(--ease-snappy);
 }
 
 .manage-btn:hover {
   border-color: var(--brand-red);
+}
+
+.manage-btn:active {
+  transform: scale(0.96);
 }
 
 .team-filter {
@@ -107,6 +117,11 @@
   border-radius: 999px;
   font-size: 0.78rem;
   cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-snappy), color var(--duration-fast) var(--ease-snappy), background-color var(--duration-fast) var(--ease-snappy), transform var(--duration-fast) var(--ease-snappy);
+}
+
+.team-chip:active {
+  transform: scale(0.96);
 }
 
 .team-chip.active {
@@ -156,11 +171,16 @@
   color: var(--text-primary);
   border-radius: 50%;
   cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-snappy), color var(--duration-fast) var(--ease-snappy), transform var(--duration-fast) var(--ease-snappy);
 }
 
 .theme-toggle-btn:hover {
   border-color: var(--brand-red);
   color: var(--brand-red-light);
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.9);
 }
 
 /* ---------- Auth screen ---------- */
@@ -614,6 +634,7 @@
   padding: 0.4rem 0.3rem;
   border-radius: 14px;
   cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-snappy), color var(--duration-fast) var(--ease-snappy);
 }
 
 .add-card-btn:hover {
@@ -631,7 +652,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  transition: background-color 0.25s ease, border-color 0.25s ease;
+  transition: background-color var(--duration-base) var(--ease-smooth), border-color var(--duration-base) var(--ease-smooth);
 }
 
 .card:hover {
@@ -654,6 +675,7 @@
   border: none;
   cursor: default;
   letter-spacing: 0.02em;
+  transition: transform var(--duration-fast) var(--ease-snappy), opacity var(--duration-fast) var(--ease-snappy);
 }
 
 .label-chip.outline {
@@ -663,6 +685,14 @@
 
 .label-chip.active {
   cursor: pointer;
+}
+
+.label-chip.active:hover {
+  opacity: 0.85;
+}
+
+.label-chip.active:active {
+  transform: scale(0.94);
 }
 
 .card-title {
@@ -740,6 +770,7 @@
   border: 2px solid var(--surface-4);
   object-fit: cover;
   flex: 0 0 auto;
+  transition: outline-color var(--duration-fast) var(--ease-snappy);
 }
 
 .avatar:first-child {
@@ -790,6 +821,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color var(--duration-fast) var(--ease-snappy), border-color var(--duration-fast) var(--ease-snappy), color var(--duration-fast) var(--ease-snappy), transform var(--duration-fast) var(--ease-snappy);
+}
+
+.timer-btn:active {
+  transform: scale(0.9);
 }
 
 .timer-btn.running {
