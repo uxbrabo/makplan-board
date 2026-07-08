@@ -6,6 +6,11 @@
   --brand-red-dark: #9c2536;
   --brand-red-soft: rgba(215, 51, 71, 0.14);
   --brand-gray: #8d8d8f;
+
+  --ease-snappy: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-smooth: cubic-bezier(0.32, 0.72, 0, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
 }
 
 :root[data-theme="dark"] {
@@ -85,4 +90,15 @@ select {
 ::-webkit-scrollbar-thumb {
   background: var(--scrollbar-thumb);
   border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
