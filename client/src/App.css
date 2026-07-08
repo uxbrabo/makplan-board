@@ -143,6 +143,25 @@
   outline-offset: 1px;
 }
 
+.theme-toggle-btn {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #3a3e46;
+  background: #1b1d21;
+  color: #e7e9ec;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--brand-red);
+  color: var(--brand-red-light);
+}
+
 /* ---------- Auth screen ---------- */
 .auth-screen {
   flex: 1;
