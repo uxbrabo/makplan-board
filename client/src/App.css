@@ -1462,7 +1462,7 @@
 
 .stat-card {
   flex: 1;
-  background: #212329;
+  background: var(--surface-2);
   border-radius: 14px;
   padding: 1rem;
   text-align: center;
@@ -1479,12 +1479,12 @@
 
 .stat-label {
   font-size: 0.78rem;
-  color: #9aa0aa;
+  color: var(--text-muted);
   margin-top: 0.2rem;
 }
 
 .dash-section {
-  background: #212329;
+  background: var(--surface-2);
   border-radius: 14px;
   padding: 1rem;
 }
@@ -1501,7 +1501,7 @@
 }
 
 .muted {
-  color: #6b707a;
+  color: var(--text-faint);
   font-size: 0.82rem;
   margin: 0;
 }
@@ -1521,7 +1521,7 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  background: #17181c;
+  background: var(--surface-0);
   border-radius: 14px;
   padding: 0.5rem 0.7rem;
   font-size: 0.85rem;
@@ -1551,7 +1551,7 @@
 }
 
 .running-members {
-  color: #9aa0aa;
+  color: var(--text-muted);
   font-size: 0.78rem;
 }
 
@@ -1566,13 +1566,13 @@
 .team-bar-label {
   width: 100px;
   flex: 0 0 auto;
-  color: #9aa0aa;
+  color: var(--text-muted);
 }
 
 .team-bar-track {
   flex: 1;
   height: 8px;
-  background: #17181c;
+  background: var(--surface-0);
   border-radius: 999px;
   overflow: hidden;
 }
@@ -1586,5 +1586,5 @@
 .team-bar-value {
   width: 60px;
   text-align: right;
-  color: #9aa0aa;
+  color: var(--text-muted);
 }
