@@ -1404,11 +1404,16 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-snappy), color var(--duration-fast) var(--ease-snappy), transform var(--duration-fast) var(--ease-snappy);
 }
 
 .add-icon-btn:hover {
   border-color: var(--brand-red);
   color: var(--brand-red-light);
+}
+
+.add-icon-btn:active {
+  transform: scale(0.9);
 }
 
 .manage-hint {
@@ -1461,10 +1466,19 @@
   display: flex;
   align-items: flex-end;
   padding: 0.3rem;
+  transition: border-color var(--duration-fast) var(--ease-snappy), transform var(--duration-fast) var(--ease-snappy);
+}
+
+.bg-swatch:hover {
+  transform: scale(1.04);
 }
 
 .bg-swatch.active {
   border-color: var(--brand-red);
+}
+
+.bg-swatch:active {
+  transform: scale(0.97);
 }
 
 .bg-swatch-check {
@@ -1518,6 +1532,15 @@
   color: var(--text-faint);
   cursor: pointer;
   font-size: 1rem;
+  transition: color var(--duration-fast) var(--ease-snappy), transform var(--duration-fast) var(--ease-snappy);
+}
+
+.manage-list button:hover {
+  color: var(--brand-red-light);
+}
+
+.manage-list button:active {
+  transform: scale(0.85);
 }
 
 .manage-form {
@@ -1538,6 +1561,13 @@
   color: var(--text-primary);
   border-radius: 14px;
   padding: 0.5rem;
+  transition: border-color var(--duration-fast) var(--ease-snappy), box-shadow var(--duration-fast) var(--ease-snappy);
+}
+
+.manage-form select:focus-visible {
+  outline: none;
+  border-color: var(--brand-red);
+  box-shadow: 0 0 0 3px var(--brand-red-soft);
 }
 
 .color-palette {
@@ -1551,10 +1581,19 @@
   border-radius: 50%;
   border: 2px solid transparent;
   cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease-snappy), border-color var(--duration-fast) var(--ease-snappy);
+}
+
+.color-swatch:hover {
+  transform: scale(1.15);
 }
 
 .color-swatch.active {
   border-color: var(--text-primary);
+}
+
+.color-swatch:active {
+  transform: scale(0.95);
 }
 
 /* ---------- Dashboard ---------- */
