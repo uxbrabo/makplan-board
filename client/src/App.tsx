@@ -12,6 +12,8 @@ import { getAuthRedirectType } from "./auth/authRedirect";
 import { useAuth } from "./auth/useAuth";
 import { useSupabaseBoard } from "./useSupabaseBoard";
 import { useTweaks } from "./useTweaks";
+import { useTheme } from "./useTheme";
+import { resolveWorkspaceBg } from "./utils/theme";
 import { TEAMS } from "./constants";
 import type { BoardState, ColumnId } from "./types";
 import "./App.css";
@@ -38,6 +40,7 @@ function App() {
 function BoardApp({ userId, userEmail, onSignOut }: { userId: string; userEmail: string; onSignOut: () => void }) {
   const boardData = useSupabaseBoard(userId);
   const { tweaks } = useTweaks();
+  const { theme, toggleTheme } = useTheme();
   const [view, setView] = useState<"board" | "overview">("board");
   const [filter, setFilter] = useState<BoardState["filter"]>("todas");
   const [openCardId, setOpenCardId] = useState<string | null>(null);
@@ -85,9 +88,11 @@ function BoardApp({ userId, userEmail, onSignOut }: { userId: string; userEmail:
         me={me}
         onOpenProfile={() => setProfileOpen(true)}
         onSignOut={onSignOut}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
 
-      <main className="workspace" style={{ background: boardData.myBgColor ?? undefined }}>
+      <main className="workspace" style={{ background: resolveWorkspaceBg(boardData.myBgColor, theme) ?? undefined }}>
         {view === "board" ? (
           <Board
             state={state}
@@ -146,6 +151,7 @@ function BoardApp({ userId, userEmail, onSignOut }: { userId: string; userEmail:
             me={me}
             email={userEmail}
             bgColor={boardData.myBgColor}
+            theme={theme}
             onClose={() => setProfileOpen(false)}
             onUploadAvatar={boardData.uploadAvatar}
             onSetBgColor={(color) => boardData.setBgColor(color).catch(console.error)}

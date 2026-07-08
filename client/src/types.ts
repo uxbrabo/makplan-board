@@ -1,3 +1,5 @@
+export type Theme = "dark" | "light";
+
 export type TeamId = "criacao" | "redacao" | "atendimento" | "diretoria";
 
 export interface Team {

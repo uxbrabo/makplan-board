@@ -1,6 +1,6 @@
 import { TEAMS } from "../constants";
 import { Avatar } from "./Avatar";
-import type { BoardState, Member } from "../types";
+import type { BoardState, Member, Theme } from "../types";
 
 interface HeaderProps {
   view: "board" | "overview";
@@ -11,6 +11,8 @@ interface HeaderProps {
   me: Member | undefined;
   onOpenProfile: () => void;
   onSignOut: () => void;
+  theme: Theme;
+  onToggleTheme: () => void;
 }
 
 export function Header({
@@ -22,6 +24,8 @@ export function Header({
   me,
   onOpenProfile,
   onSignOut,
+  theme,
+  onToggleTheme,
 }: HeaderProps) {
   return (
     <header className="app-header">
@@ -71,6 +75,35 @@ export function Header({
           </button>
         ))}
       </div>
+
+      <button
+        type="button"
+        className="theme-toggle-btn"
+        onClick={onToggleTheme}
+        aria-label={theme === "dark" ? "Mudar para tema claro" : "Mudar para tema escuro"}
+        title={theme === "dark" ? "Mudar para tema claro" : "Mudar para tema escuro"}
+      >
+        {theme === "dark" ? (
+          <svg viewBox="0 0 20 20" fill="none" width="16" height="16" aria-hidden="true">
+            <path
+              d="M17 11.5A7 7 0 1 1 8.5 3a5.5 5.5 0 0 0 8.5 8.5Z"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinejoin="round"
+            />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 20 20" fill="none" width="16" height="16" aria-hidden="true">
+            <circle cx="10" cy="10" r="3.5" stroke="currentColor" strokeWidth="1.5" />
+            <path
+              d="M10 2.5v2M10 15.5v2M17.5 10h-2M4.5 10h-2M15.3 4.7l-1.4 1.4M6.1 13.9l-1.4 1.4M15.3 15.3l-1.4-1.4M6.1 6.1 4.7 4.7"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+          </svg>
+        )}
+      </button>
 
       <div className="user-chip">
         {me && (

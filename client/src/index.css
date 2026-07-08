@@ -1,5 +1,4 @@
 :root {
-  color-scheme: dark;
   font-family: "Instrument Sans", system-ui, sans-serif;
 
   --brand-red: #d73347;
@@ -7,6 +6,44 @@
   --brand-red-dark: #9c2536;
   --brand-red-soft: rgba(215, 51, 71, 0.14);
   --brand-gray: #8d8d8f;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --surface-0: #17181c;
+  --surface-1: #1f2126;
+  --surface-2: #212329;
+  --surface-3: #1b1d21;
+  --surface-4: #2a2d34;
+  --surface-panel: #1a1c21;
+  --border: #2e3138;
+  --border-strong: #3a3e46;
+  --text-primary: #e7e9ec;
+  --text-strong: #f1f2f4;
+  --text-muted: #9aa0aa;
+  --text-faint: #6b707a;
+  --overlay: rgba(0, 0, 0, 0.55);
+  --scrollbar-thumb: #363a42;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --surface-0: #eef0f2;
+  --surface-1: #ffffff;
+  --surface-2: #f7f8fa;
+  --surface-3: #f1f2f5;
+  --surface-4: #dcdee3;
+  --surface-panel: #ffffff;
+  --border: #e2e4e8;
+  --border-strong: #d5d8dd;
+  --text-primary: #1c1e22;
+  --text-strong: #101115;
+  --text-muted: #6b7280;
+  --text-faint: #70757e;
+  --overlay: rgba(15, 17, 21, 0.35);
+  --scrollbar-thumb: #c9ccd2;
 }
 
 * {
@@ -17,8 +54,9 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background: #17181c;
-  color: #e7e9ec;
+  background: var(--surface-0);
+  color: var(--text-primary);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 #root {
@@ -45,6 +83,6 @@ select {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #363a42;
+  background: var(--scrollbar-thumb);
   border-radius: 8px;
 }

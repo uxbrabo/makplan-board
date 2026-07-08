@@ -1,22 +1,24 @@
 import { useRef, useState } from "react";
 import { motion } from "motion/react";
-import { WORKSPACE_BG_PALETTE } from "../constants";
+import { WORKSPACE_BG_PALETTE, WORKSPACE_BG_PALETTE_LIGHT } from "../constants";
 import { Avatar } from "./Avatar";
-import type { Member } from "../types";
+import type { Member, Theme } from "../types";
 
 interface ProfileModalProps {
   me: Member;
   email: string;
   bgColor: string | null;
+  theme: Theme;
   onClose: () => void;
   onUploadAvatar: (file: File) => Promise<void>;
   onSetBgColor: (color: string | null) => void;
 }
 
-export function ProfileModal({ me, email, bgColor, onClose, onUploadAvatar, onSetBgColor }: ProfileModalProps) {
+export function ProfileModal({ me, email, bgColor, theme, onClose, onUploadAvatar, onSetBgColor }: ProfileModalProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const palette = theme === "light" ? WORKSPACE_BG_PALETTE_LIGHT : WORKSPACE_BG_PALETTE;
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -82,12 +84,12 @@ export function ProfileModal({ me, email, bgColor, onClose, onUploadAvatar, onSe
           <section>
             <h3>Cor de fundo da sua área de trabalho</h3>
             <div className="bg-palette">
-              {WORKSPACE_BG_PALETTE.map((option) => (
+              {palette.map((option) => (
                 <button
                   key={option.name}
                   type="button"
                   className={bgColor === option.value ? "bg-swatch active" : "bg-swatch"}
-                  style={{ background: option.value ?? "#17181c" }}
+                  style={{ background: option.value ?? "var(--surface-0)" }}
                   onClick={() => onSetBgColor(option.value)}
                 >
                   {bgColor === option.value && <span className="bg-swatch-check">✓</span>}
