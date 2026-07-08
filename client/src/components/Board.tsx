@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { COLUMNS } from "../constants";
 import { CardItem } from "./CardItem";
+import { springGentle, springSnappy } from "../motion";
 import type { BoardState, Card, ColumnId } from "../types";
 
 interface BoardProps {
@@ -61,9 +62,19 @@ export function Board({ state, now, onOpenCard, onToggleTimer, onAddCard, onMove
                     initial={{ opacity: 0, scale: 0.92 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.92 }}
-                    transition={{ type: "spring", stiffness: 500, damping: 38, mass: 0.6 }}
-                    whileHover={{ scale: 1.015 }}
-                    whileTap={{ scale: 0.98 }}
+                    transition={springGentle}
+                    whileHover={{
+                      scale: 1.02,
+                      y: -2,
+                      boxShadow: "0 10px 24px -8px rgba(0, 0, 0, 0.35)",
+                      transition: springSnappy,
+                    }}
+                    whileTap={{
+                      scale: 0.98,
+                      y: 0,
+                      boxShadow: "0 2px 6px -2px rgba(0, 0, 0, 0.2)",
+                      transition: springSnappy,
+                    }}
                     onDragOver={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
