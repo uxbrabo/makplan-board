@@ -142,6 +142,13 @@ export function Board({ state, now, onOpenCard, onToggleTimer, onAddCard, onMove
   async function handleDragEnd(event: DragEndEvent) {
     isDraggingRef.current = false;
     setActiveId(null);
+    if (!event.over) {
+      // Dropped outside any droppable target: treat like a cancel, discard
+      // whatever optimistic reordering happened during the drag, and don't
+      // persist anything.
+      setColumns(buildColumnMap(visibleCards));
+      return;
+    }
     const cardId = String(event.active.id);
     const toCol = columnOf(cardId);
     if (!toCol) return;
