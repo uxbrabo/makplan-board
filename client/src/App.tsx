@@ -50,12 +50,19 @@ function BoardApp({ userId, userEmail, onSignOut }: { userId: string; userEmail:
   const [now, setNow] = useState(Date.now());
 
   const anyRunning = boardData.cards.some((c) => c.run);
+  const me = boardData.members.find((m) => m.id === userId);
 
   useEffect(() => {
     if (!anyRunning) return;
     const interval = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(interval);
   }, [anyRunning]);
+
+  useEffect(() => {
+    if (view === "diretoria" && me?.team !== "diretoria") {
+      setView("board");
+    }
+  }, [me, view]);
 
   if (boardData.loading) {
     return <div className="status-message">Carregando quadro...</div>;
@@ -69,7 +76,6 @@ function BoardApp({ userId, userEmail, onSignOut }: { userId: string; userEmail:
     tweaks,
   };
 
-  const me = boardData.members.find((m) => m.id === userId);
   const openCard = state.cards.find((c) => c.id === openCardId) ?? null;
 
   async function handleAddCard(col: ColumnId) {
@@ -105,8 +111,17 @@ function BoardApp({ userId, userEmail, onSignOut }: { userId: string; userEmail:
           />
         ) : view === "overview" ? (
           <Dashboard state={state} now={now} onOpenCard={setOpenCardId} />
-        ) : (
+        ) : me?.team === "diretoria" ? (
           <DiretoriaPanel state={state} now={now} />
+        ) : (
+          <Board
+            state={state}
+            now={now}
+            onOpenCard={setOpenCardId}
+            onToggleTimer={(id) => boardData.toggleTimer(id, tweaks.timerUnico).catch(console.error)}
+            onAddCard={(col) => handleAddCard(col).catch(console.error)}
+            onMoveCard={(id, toCol, beforeId) => boardData.moveCard(id, toCol, beforeId)}
+          />
         )}
       </main>
 
