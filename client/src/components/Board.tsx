@@ -226,7 +226,7 @@ export function Board({ state, now, onOpenCard, onToggleTimer, onAddCard, onMove
 
         <DragOverlay>
           {activeCard ? (
-            <div className="card card-drag-overlay">
+            <div className="card-drag-overlay">
               <CardItem
                 card={activeCard}
                 members={state.members}
