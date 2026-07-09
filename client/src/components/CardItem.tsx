@@ -47,6 +47,7 @@ export function CardItem({ card, members, labels, now, tweaks, onOpen, onToggleT
           <span className="check-progress">✓ {checkedCount}/{card.check.length}</span>
         )}
         {card.comments.length > 0 && <span className="comment-count">💬 {card.comments.length}</span>}
+        {card.col === "entregue" && <span className="delivered-badge">✓ Entregue</span>}
         {team && (
           <span className="team-pill" style={{ color: team.color, borderColor: team.color }}>
             {team.name}

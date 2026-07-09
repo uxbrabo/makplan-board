@@ -761,6 +761,11 @@
   color: var(--text-muted);
 }
 
+.delivered-badge {
+  color: #35c48d;
+  font-weight: 600;
+}
+
 .team-pill {
   margin-left: auto;
   border: 1px solid;
