@@ -5,8 +5,8 @@ import { Avatar } from "./Avatar";
 import type { BoardState, Member, Theme } from "../types";
 
 interface HeaderProps {
-  view: "board" | "overview";
-  onChangeView: (view: "board" | "overview") => void;
+  view: "board" | "overview" | "diretoria";
+  onChangeView: (view: "board" | "overview" | "diretoria") => void;
   filter: BoardState["filter"];
   onChangeFilter: (filter: BoardState["filter"]) => void;
   onManage: () => void;
@@ -51,6 +51,15 @@ export function Header({
         >
           Visão geral
         </button>
+        {me?.team === "diretoria" && (
+          <button
+            type="button"
+            className={view === "diretoria" ? "tab active" : "tab"}
+            onClick={() => onChangeView("diretoria")}
+          >
+            Diretoria
+          </button>
+        )}
       </div>
 
       <button type="button" className="manage-btn" onClick={onManage}>

@@ -3,6 +3,7 @@ import { AnimatePresence } from "motion/react";
 import { Header } from "./components/Header";
 import { Board } from "./components/Board";
 import { Dashboard } from "./components/Dashboard";
+import { DiretoriaPanel } from "./components/DiretoriaPanel";
 import { CardModal } from "./components/CardModal";
 import { ManageModal } from "./components/ManageModal";
 import { ProfileModal } from "./components/ProfileModal";
@@ -41,7 +42,7 @@ function BoardApp({ userId, userEmail, onSignOut }: { userId: string; userEmail:
   const boardData = useSupabaseBoard(userId);
   const { tweaks } = useTweaks();
   const { theme, toggleTheme } = useTheme();
-  const [view, setView] = useState<"board" | "overview">("board");
+  const [view, setView] = useState<"board" | "overview" | "diretoria">("board");
   const [filter, setFilter] = useState<BoardState["filter"]>("todas");
   const [openCardId, setOpenCardId] = useState<string | null>(null);
   const [manageOpen, setManageOpen] = useState(false);
@@ -102,8 +103,10 @@ function BoardApp({ userId, userEmail, onSignOut }: { userId: string; userEmail:
             onAddCard={(col) => handleAddCard(col).catch(console.error)}
             onMoveCard={(id, toCol, beforeId) => boardData.moveCard(id, toCol, beforeId)}
           />
-        ) : (
+        ) : view === "overview" ? (
           <Dashboard state={state} now={now} onOpenCard={setOpenCardId} />
+        ) : (
+          <DiretoriaPanel state={state} now={now} />
         )}
       </main>
 
