@@ -1059,6 +1059,37 @@
   border-color: var(--brand-red);
 }
 
+.delivery-action-btn {
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  padding: 0.6rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: filter var(--duration-fast) var(--ease-snappy), transform var(--duration-fast) var(--ease-snappy);
+}
+
+.delivery-action-btn:hover {
+  filter: brightness(1.08);
+}
+
+.delivery-action-btn:active {
+  transform: scale(0.98);
+}
+
+.delivery-action-btn.mark-delivered {
+  background: #1F845A;
+  color: #fff;
+}
+
+.delivery-action-btn.move-to-adjust {
+  background: var(--surface-4);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+}
+
 .timer-block {
   background: var(--surface-2);
   border-radius: 14px;

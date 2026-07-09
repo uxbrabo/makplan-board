@@ -204,6 +204,24 @@ export function CardModal({
               onChange={(e) => onUpdate({ title: e.target.value })}
             />
 
+            {card.col === "entregue" ? (
+              <button
+                type="button"
+                className="delivery-action-btn move-to-adjust"
+                onClick={() => onUpdate({ col: "ajustes" })}
+              >
+                ↩ Mover para Ajuste
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="delivery-action-btn mark-delivered"
+                onClick={() => onUpdate({ col: "entregue" })}
+              >
+                ✓ Tarefa concluída
+              </button>
+            )}
+
             <div className="timer-block">
               <div className="timer-label">TEMPO REGISTRADO</div>
               <div className="timer-value">{formatCardTime(card, now, true)}</div>
