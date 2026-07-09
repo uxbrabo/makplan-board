@@ -183,12 +183,21 @@ export function useSupabaseBoard(userId: string) {
     const index = insertIndex === -1 ? destCards.length : insertIndex;
     const newOrder = [...destCards.slice(0, index), moving, ...destCards.slice(index)];
 
+    const previousCards = cardsRef.current;
+    const positionById = new Map(newOrder.map((c, i) => [c.id, i]));
+    const optimisticCards = previousCards.map((c) =>
+      positionById.has(c.id) ? { ...c, col: toCol, position: positionById.get(c.id)! } : c,
+    );
+    setCards(optimisticCards);
+
     const results = await Promise.all(
       newOrder.map((c, i) => supabase.from("cards").update({ col: toCol, position: i }).eq("id", c.id)),
     );
     const failed = results.find((r) => r.error);
-    if (failed?.error) throw failed.error;
-    await fetchAll();
+    if (failed?.error) {
+      setCards(previousCards);
+      throw failed.error;
+    }
   }
 
   async function toggleCardLabel(cardId: string, label: string) {
