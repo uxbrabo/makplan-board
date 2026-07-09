@@ -668,6 +668,21 @@
   border-color: var(--brand-red);
 }
 
+.card-drag-overlay {
+  transform: scale(1.03);
+  box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.35);
+  cursor: grabbing;
+}
+
+.board-error {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.5);
+}
+
 .card-labels {
   display: flex;
   flex-wrap: wrap;

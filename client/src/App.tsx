@@ -100,7 +100,7 @@ function BoardApp({ userId, userEmail, onSignOut }: { userId: string; userEmail:
             onOpenCard={setOpenCardId}
             onToggleTimer={(id) => boardData.toggleTimer(id, tweaks.timerUnico).catch(console.error)}
             onAddCard={(col) => handleAddCard(col).catch(console.error)}
-            onMoveCard={(id, toCol, beforeId) => boardData.moveCard(id, toCol, beforeId).catch(console.error)}
+            onMoveCard={(id, toCol, beforeId) => boardData.moveCard(id, toCol, beforeId)}
           />
         ) : (
           <Dashboard state={state} now={now} onOpenCard={setOpenCardId} />
