@@ -1095,6 +1095,11 @@
   border: 1px solid var(--border-strong);
 }
 
+.delivery-action-btn.start-task {
+  background: var(--brand-red);
+  color: #fff;
+}
+
 .timer-block {
   background: var(--surface-2);
   border-radius: 14px;

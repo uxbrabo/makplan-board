@@ -204,6 +204,16 @@ export function CardModal({
               onChange={(e) => onUpdate({ title: e.target.value })}
             />
 
+            {card.col === "afazer" && (
+              <button
+                type="button"
+                className="delivery-action-btn start-task"
+                onClick={() => onUpdate({ col: "fazendo" })}
+              >
+                ▶ Iniciar tarefa
+              </button>
+            )}
+
             {card.col === "entregue" ? (
               <button
                 type="button"
