@@ -12,10 +12,9 @@ interface CardItemProps {
   tweaks: Tweaks;
   onOpen: () => void;
   onToggleTimer: () => void;
-  onDragStart: () => void;
 }
 
-export function CardItem({ card, members, labels, now, tweaks, onOpen, onToggleTimer, onDragStart }: CardItemProps) {
+export function CardItem({ card, members, labels, now, tweaks, onOpen, onToggleTimer }: CardItemProps) {
   const team = TEAMS.find((t) => t.id === card.team);
   const cardMembers = card.members
     .map((id) => members.find((m) => m.id === id))
@@ -25,12 +24,7 @@ export function CardItem({ card, members, labels, now, tweaks, onOpen, onToggleT
   const cover = card.attachments.find((a) => a.id === card.coverAttachmentId);
 
   return (
-    <div
-      className="card"
-      draggable
-      onDragStart={onDragStart}
-      onClick={onOpen}
-    >
+    <div className="card" onClick={onOpen}>
       {cover && <img src={cover.url} alt="" className="card-cover" />}
 
       {card.labels.length > 0 && (
